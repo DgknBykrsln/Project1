@@ -23,11 +23,15 @@ public class GridManager : MonoBehaviour
     public void UpdateGrid()
     {
         var totalCellsNeeded = gridSize * gridSize;
-        var orthoHeight = cameraManager.OrtoHeight;
-        var orthoWidth = cameraManager.OrtoWidth;
+        var orthoHeight = cameraManager.Height;
+        var orthoWidth = cameraManager.Width;
         var cellSize = Mathf.Min(orthoWidth / gridSize, orthoHeight / gridSize);
         var startX = -orthoWidth / 2 + cellSize / 2;
-        var startY = orthoHeight / 2 - cellSize / 2;
+
+        var gridTopY = (gridSize / 2f) * cellSize;
+        var pivotOffset = cellSize / 2f;
+
+        transform.position = new Vector3(0, gridTopY + pivotOffset, 0);
 
         for (var i = 0; i < totalCellsNeeded || i < cells.Count; i++)
         {
@@ -46,7 +50,7 @@ public class GridManager : MonoBehaviour
 
                 var x = i % gridSize;
                 var y = i / gridSize;
-                var cellPosition = new Vector3(startX + x * cellSize, startY - y * cellSize, 0);
+                var cellPosition = new Vector3(startX + x * cellSize, gridTopY - y * cellSize, 0);
                 var targetCellScale = Vector3.one * cellSize / cell.BoundSize;
                 var cellName = $"Cell ({x},{y})";
 
@@ -59,5 +63,7 @@ public class GridManager : MonoBehaviour
                 i--;
             }
         }
+
+        transform.position = cameraManager.GetScreenTopPosition();
     }
 }
