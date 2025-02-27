@@ -12,9 +12,20 @@ public class GameInstaller : MonoInstaller
 
     public override void InstallBindings()
     {
-        Container.Bind<StateMachine<SpriteButton, SpriteButton.SpriteButtonState>>().AsTransient();
+        BindStateMachine<Cell, Cell.CellState>();
+        BindStateMachine<SpriteButton, SpriteButton.SpriteButtonState>();
 
-        Container.Bind<CameraManager>().FromInstance(cameraManager).AsSingle();
-        Container.Bind<ObjectPooler>().FromInstance(objectPooler).AsSingle();
+        BindFromInstance(cameraManager);
+        BindFromInstance(objectPooler);
+    }
+
+    private void BindStateMachine<T, TState>() where T : MonoBehaviour where TState : struct, Enum
+    {
+        Container.Bind<StateMachine<T, TState>>().AsTransient();
+    }
+
+    private void BindFromInstance<T>(T instance) where T : class
+    {
+        Container.Bind<T>().FromInstance(instance).AsSingle();
     }
 }
