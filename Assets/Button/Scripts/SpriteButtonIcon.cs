@@ -9,6 +9,8 @@ public class SpriteButtonIcon : SpriteButton
 
     [SerializeField, Foldout("Setup")] private Transform iconTransform;
 
+    public float BoundSize => spriteRenderer.bounds.size.x;
+
     protected override void NormalEnter()
     {
         base.NormalEnter();

@@ -6,6 +6,8 @@ public class SpriteFitter : MonoBehaviour
     [SerializeField, Foldout("Setup")] private SpriteRenderer spriteRenderer;
 
     private Camera mainCamera;
+    
+    
 
     private void Start()
     {

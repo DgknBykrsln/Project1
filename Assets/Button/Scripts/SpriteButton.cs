@@ -16,24 +16,23 @@ public class SpriteButton : MonoBehaviour
     [SerializeField, BoxGroup("Settings")] private Sprite normalSprite;
     [SerializeField, BoxGroup("Settings")] private Sprite pressedSprite;
 
-    [SerializeField, Foldout("Setup")] private SpriteRenderer spriteRenderer;
+    [SerializeField, Foldout("Setup")] protected SpriteRenderer spriteRenderer;
 
     private StateMachine<SpriteButton, SpriteButtonState> stateMachine;
 
-    private Camera mainCamera;
+    private CameraManager cameraManager;
 
     [Inject]
-    private void Construct(StateMachine<SpriteButton, SpriteButtonState> injectedStateMachine)
+    private void Construct(CameraManager _cameraManager, StateMachine<SpriteButton, SpriteButtonState> _stateMachine)
     {
-        stateMachine = injectedStateMachine;
+        cameraManager = _cameraManager;
+        stateMachine = _stateMachine;
         stateMachine.Initialize(this);
-        stateMachine.ChangeState(SpriteButtonState.Normal);
-        mainCamera = Camera.main;
     }
 
     private bool IsMouseOver()
     {
-        var ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        var ray = cameraManager.ScreenPointToRay();
         var hit = Physics2D.Raycast(ray.origin, Vector2.zero);
         return hit.collider != null && hit.collider.gameObject == gameObject;
     }
