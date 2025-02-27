@@ -15,15 +15,20 @@ public class Cell : Poolable
         Active
     }
 
+    public CellState State => stateMachine.CurrentState;
+
     public float BoundSize => boundSize;
 
     private float boundSize;
 
     private StateMachine<Cell, CellState> stateMachine;
 
+    private GridManager gridManager;
+
     [Inject]
-    private void Construct(StateMachine<Cell, CellState> _stateMachine)
+    private void Construct(StateMachine<Cell, CellState> _stateMachine, GridManager _gridManager)
     {
+        gridManager = _gridManager;
         stateMachine = _stateMachine;
         stateMachine.Initialize(this);
         boundSize = spriteButtonIcon.BoundSize;
@@ -69,6 +74,8 @@ public class Cell : Poolable
 
     #endregion
 
+    #region Methods
+
     public void PrepareCell(Transform parent, Vector3 position, Vector3 scale, string name)
     {
         stateMachine.ChangeState(CellState.Inactive);
@@ -78,10 +85,17 @@ public class Cell : Poolable
         transform.name = name;
     }
 
-    public void SwitchCellState()
+    public void ToggleState()
     {
         var currentState = stateMachine.CurrentState;
-
         stateMachine.ChangeState(currentState == CellState.Inactive ? CellState.Active : CellState.Inactive);
     }
+
+    public void ToggleStateAndNotify()
+    {
+        ToggleState();
+        gridManager.NotifyStateChange();
+    }
+
+    #endregion
 }

@@ -15,7 +15,6 @@ public class CameraManager : MonoBehaviour
 
     private Vector2Int screenSize;
 
-
     [Inject]
     private void Construct()
     {

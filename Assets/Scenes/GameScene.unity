@@ -151,7 +151,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b03b186ab3f6461788d6d5ea34ee25f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridSize: 5
+  gridSize: 10
+  cells: []
 --- !u!4 &56714479
 Transform:
   m_ObjectHideFlags: 0
@@ -736,3 +737,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectPooler: {fileID: 223194923}
   cameraManager: {fileID: 1057601375}
+  gridManager: {fileID: 56714478}
