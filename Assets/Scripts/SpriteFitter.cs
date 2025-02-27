@@ -1,24 +1,24 @@
 using NaughtyAttributes;
 using UnityEngine;
+using Zenject;
 
 public class SpriteFitter : MonoBehaviour
 {
     [SerializeField, Foldout("Setup")] private SpriteRenderer spriteRenderer;
 
-    private Camera mainCamera;
-    
-    
+    private CameraManager cameraManager;
 
-    private void Start()
+    [Inject]
+    private void Construct(CameraManager _cameraManager)
     {
-        mainCamera = Camera.main;
+        cameraManager = _cameraManager;
         FitSpriteToCamera();
     }
 
     private void FitSpriteToCamera()
     {
-        var orthoHeight = mainCamera.orthographicSize * 2f;
-        var orthoWidth = orthoHeight * Screen.width / Screen.height;
+        var orthoHeight = cameraManager.Height;
+        var orthoWidth = cameraManager.Width;
 
         var bounds = spriteRenderer.sprite.bounds;
         var spriteHeight = bounds.size.y;
