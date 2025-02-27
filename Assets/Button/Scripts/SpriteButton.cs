@@ -45,7 +45,7 @@ public class SpriteButton : MonoBehaviour
 
     #region Normal
 
-    private void NormalEnter()
+    protected virtual void NormalEnter()
     {
         spriteRenderer.sprite = normalSprite;
     }
@@ -67,7 +67,7 @@ public class SpriteButton : MonoBehaviour
 
     #region Pressed
 
-    private void PressedEnter()
+    protected virtual void PressedEnter()
     {
         spriteRenderer.sprite = pressedSprite;
     }

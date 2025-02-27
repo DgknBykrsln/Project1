@@ -22,15 +22,23 @@ public class StateMachine<T, TState> where T : MonoBehaviour where TState : stru
     private void CacheStateMethods()
     {
         var ownerType = Owner.GetType();
+        var baseType = typeof(T);
+
         foreach (TState state in Enum.GetValues(typeof(TState)))
         {
             var stateName = state.ToString();
 
-            exitMethods[state] = ownerType.GetMethod(stateName + "Exit", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-            enterMethods[state] = ownerType.GetMethod(stateName + "Enter", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-            executeMethods[state] = ownerType.GetMethod(stateName + "Execute", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-            fixedExecuteMethods[state] = ownerType.GetMethod(stateName + "FixedExecute", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            exitMethods[state] = GetMethod(ownerType, baseType, stateName + "Exit");
+            enterMethods[state] = GetMethod(ownerType, baseType, stateName + "Enter");
+            executeMethods[state] = GetMethod(ownerType, baseType, stateName + "Execute");
+            fixedExecuteMethods[state] = GetMethod(ownerType, baseType, stateName + "FixedExecute");
         }
+    }
+
+    private static MethodInfo GetMethod(Type ownerType, Type baseType, string methodName)
+    {
+        return ownerType.GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+               ?? baseType.GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
     }
 
     public void ChangeState(TState newState)
