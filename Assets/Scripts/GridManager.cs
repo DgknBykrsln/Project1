@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
@@ -167,7 +168,7 @@ public class GridManager : MonoBehaviour
 
         foreach (var cell in cellsToSwitch)
         {
-            cell.ToggleState();
+            cell.ToggleStateWithAnimation(SpriteButtonIcon.ScaleDuration);
         }
     }
 }

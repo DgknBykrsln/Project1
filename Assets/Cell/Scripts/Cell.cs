@@ -25,6 +25,8 @@ public class Cell : Poolable
 
     private GridManager gridManager;
 
+    private Coroutine toggleStateWithAnimationRoutine;
+
     [Inject]
     private void Construct(StateMachine<Cell, CellState> _stateMachine, GridManager _gridManager)
     {
@@ -76,6 +78,15 @@ public class Cell : Poolable
 
     #region Methods
 
+    private IEnumerator ToggleStateWithAnimationRoutine(float duration)
+    {
+        spriteButtonIcon.DoSuccessAnimation(duration);
+        spriteButtonIcon.DeactivateClick();
+        yield return new WaitForSeconds(duration);
+        spriteButtonIcon.ActivateClick();
+        ToggleState();
+    }
+
     public void PrepareCell(Transform parent, Vector3 position, Vector3 scale, string name)
     {
         stateMachine.ChangeState(CellState.Inactive);
@@ -89,6 +100,16 @@ public class Cell : Poolable
     {
         var currentState = stateMachine.CurrentState;
         stateMachine.ChangeState(currentState == CellState.Inactive ? CellState.Active : CellState.Inactive);
+    }
+
+    public void ToggleStateWithAnimation(float duration)
+    {
+        if (toggleStateWithAnimationRoutine != null)
+        {
+            StopCoroutine(toggleStateWithAnimationRoutine);
+        }
+
+        toggleStateWithAnimationRoutine = StartCoroutine(ToggleStateWithAnimationRoutine(duration));
     }
 
     public void ToggleStateAndNotify()

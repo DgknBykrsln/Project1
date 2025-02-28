@@ -87,7 +87,7 @@ public class SpriteButton : MonoBehaviour
         spriteRenderer.color = themeManager.ButtonPressedColor;
     }
 
-    private void PressedExecute()
+    protected virtual void PressedExecute()
     {
         if (Input.GetMouseButtonUp(0))
         {

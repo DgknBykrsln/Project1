@@ -15,10 +15,15 @@ public class SpriteButtonIcon : SpriteButton
 
     public float BoundSize => spriteRenderer.bounds.size.x;
 
-    private static float scaleDuration => 0.1f;
+    public static float ScaleDuration => 0.1f;
 
+    private Color successColor => Color.green;
+
+    private Tween colorTween;
     private Tween fadeTween;
     private Tween scaleTween;
+
+    private bool canClick = true;
 
     protected override void NormalEnter()
     {
@@ -34,13 +39,20 @@ public class SpriteButtonIcon : SpriteButton
         moveRoot.localPosition = Vector3.up * -moveYAmount;
     }
 
+    protected override void PressedExecute()
+    {
+        if (!canClick) return;
+
+        base.PressedExecute();
+    }
+
     public void OpenIcon()
     {
         scaleTween?.Kill();
-        scaleTween = scaleRoot.DOScale(Vector3.one, scaleDuration).SetEase(Ease.OutBack);
+        scaleTween = scaleRoot.DOScale(Vector3.one, ScaleDuration).SetEase(Ease.OutBack);
 
         fadeTween?.Kill();
-        fadeTween = iconSpriteRenderer.DOFade(1f, scaleDuration).SetEase(Ease.OutSine);
+        fadeTween = iconSpriteRenderer.DOFade(1f, ScaleDuration).SetEase(Ease.OutSine);
     }
 
     public void CloseIcon(bool isInstant = false)
@@ -56,9 +68,25 @@ public class SpriteButtonIcon : SpriteButton
         }
 
         fadeTween?.Kill();
-        fadeTween = iconSpriteRenderer.DOFade(0f, scaleDuration).SetEase(Ease.InSine);
+        fadeTween = iconSpriteRenderer.DOFade(0f, ScaleDuration).SetEase(Ease.InSine);
 
         scaleTween?.Kill();
-        scaleTween = scaleRoot.DOScale(Vector3.zero, scaleDuration).SetEase(Ease.InBack);
+        scaleTween = scaleRoot.DOScale(Vector3.zero, ScaleDuration).SetEase(Ease.InBack);
+    }
+
+    public void DoSuccessAnimation(float duration)
+    {
+        colorTween?.Kill();
+        colorTween = spriteRenderer.DOColor(successColor, duration).SetLoops(2, LoopType.Yoyo);
+    }
+
+    public void DeactivateClick()
+    {
+        canClick = false;
+    }
+
+    public void ActivateClick()
+    {
+        canClick = true;
     }
 }
