@@ -1,3 +1,4 @@
+using System;
 using NaughtyAttributes;
 using UnityEngine;
 using Zenject;
@@ -7,12 +8,26 @@ public class SpriteFitter : MonoBehaviour
     [SerializeField, Foldout("Setup")] private SpriteRenderer spriteRenderer;
 
     private CameraManager cameraManager;
+    private ThemeManager themeManager;
 
     [Inject]
-    private void Construct(CameraManager _cameraManager)
+    private void Construct(CameraManager _cameraManager, ThemeManager _themeManager)
     {
         cameraManager = _cameraManager;
+        themeManager = _themeManager;
+        ThemeManager.OnThemeChange += ChangeBgColor;
+        ChangeBgColor();
         FitSpriteToCamera();
+    }
+
+    private void OnDestroy()
+    {
+        ThemeManager.OnThemeChange -= ChangeBgColor;
+    }
+
+    private void ChangeBgColor()
+    {
+        spriteRenderer.color = themeManager.BgColor;
     }
 
     private void FitSpriteToCamera()

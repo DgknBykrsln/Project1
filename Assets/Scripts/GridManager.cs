@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Events;
 using Zenject;
 
 public class GridManager : MonoBehaviour
@@ -17,6 +18,8 @@ public class GridManager : MonoBehaviour
 
     [SerializeField, BoxGroup("Settings")] private int gridSize;
     [SerializeField, ReadOnly] private List<Cell> cells = new();
+
+    public static UnityAction<int> OnGridUpdate;
 
     private CameraManager cameraManager;
     private ObjectPooler objectPooler;
@@ -136,6 +139,8 @@ public class GridManager : MonoBehaviour
         }
 
         transform.position = cameraManager.GetScreenTopPosition();
+
+        OnGridUpdate?.Invoke(gridSize);
     }
 
 

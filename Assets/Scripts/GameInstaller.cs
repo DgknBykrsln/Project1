@@ -7,17 +7,22 @@ using Zenject;
 
 public class GameInstaller : MonoInstaller
 {
-    [SerializeField, Foldout("Setup")] private ObjectPooler objectPooler;
-    [SerializeField, Foldout("Setup")] private CameraManager cameraManager;
-    [SerializeField, Foldout("Setup")] private GridManager gridManager;
+    [SerializeField, Foldout("Setup Game")] private ObjectPooler objectPooler;
+    [SerializeField, Foldout("Setup Game")] private CameraManager cameraManager;
+    [SerializeField, Foldout("Setup Game")] private GridManager gridManager;
+
+    [SerializeField, Foldout("Setup Theme")] private ThemeManager themeManager;
+    [SerializeField, Foldout("Setup Theme")] private List<Theme> themes;
 
     public override void InstallBindings()
     {
         BindStateMachine<Cell, Cell.CellState>();
         BindStateMachine<SpriteButton, SpriteButton.SpriteButtonState>();
 
-        BindFromInstance(gridManager);
+        BindThemeManager();
+
         BindFromInstance(cameraManager);
+        BindFromInstance(gridManager);
         BindFromInstance(objectPooler);
     }
 
@@ -29,5 +34,11 @@ public class GameInstaller : MonoInstaller
     private void BindFromInstance<T>(T instance) where T : class
     {
         Container.Bind<T>().FromInstance(instance).AsSingle();
+    }
+
+    private void BindThemeManager()
+    {
+        Container.BindInstance(themes).AsSingle();
+        Container.BindInstance(themeManager).AsSingle().WithArguments(themes);
     }
 }

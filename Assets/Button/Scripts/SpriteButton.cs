@@ -21,13 +21,27 @@ public class SpriteButton : MonoBehaviour
     private StateMachine<SpriteButton, SpriteButtonState> stateMachine;
 
     private CameraManager cameraManager;
+    private ThemeManager themeManager;
 
     [Inject]
-    private void Construct(CameraManager _cameraManager, StateMachine<SpriteButton, SpriteButtonState> _stateMachine)
+    private void Construct(CameraManager _cameraManager, StateMachine<SpriteButton, SpriteButtonState> _stateMachine, ThemeManager _themeManager)
     {
         cameraManager = _cameraManager;
         stateMachine = _stateMachine;
+        themeManager = _themeManager;
         stateMachine.Initialize(this);
+        stateMachine.ChangeState(SpriteButtonState.Normal);
+        ThemeManager.OnThemeChange += ChangeButtonColor;
+    }
+
+    private void OnDestroy()
+    {
+        ThemeManager.OnThemeChange -= ChangeButtonColor;
+    }
+
+    private void ChangeButtonColor()
+    {
+        spriteRenderer.color = stateMachine.CurrentState == SpriteButtonState.Normal ? themeManager.ButtonUnPressedColor : themeManager.ButtonPressedColor;
     }
 
     private bool IsMouseOver()
@@ -47,6 +61,7 @@ public class SpriteButton : MonoBehaviour
     protected virtual void NormalEnter()
     {
         spriteRenderer.sprite = normalSprite;
+        spriteRenderer.color = themeManager.ButtonUnPressedColor;
     }
 
     private void NormalExecute()
@@ -69,6 +84,7 @@ public class SpriteButton : MonoBehaviour
     protected virtual void PressedEnter()
     {
         spriteRenderer.sprite = pressedSprite;
+        spriteRenderer.color = themeManager.ButtonPressedColor;
     }
 
     private void PressedExecute()
