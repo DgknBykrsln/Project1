@@ -30,7 +30,7 @@ public class UiPanel : MonoBehaviour
         ChangeBgColors();
         UpdateMatchText();
 
-        transform.position = cameraManager.GetScreenBottomPosition() + Vector3.up * 2f;
+        transform.position = cameraManager.GetScreenBottomPosition() + Vector3.up * .5f;
     }
 
     private void OnDestroy()
