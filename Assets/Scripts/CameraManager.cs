@@ -25,6 +25,15 @@ public class CameraManager : MonoBehaviour
     {
         var screenTopCenter = new Vector3(screenSize.x / 2f, screenSize.y, mainCamera.nearClipPlane);
         var worldPosition = mainCamera.ScreenToWorldPoint(screenTopCenter);
+        worldPosition.z = 0;
+        return worldPosition;
+    }
+
+    public Vector3 GetScreenBottomPosition()
+    {
+        var screenBottomCenter = new Vector3(screenSize.x / 2f, 0, mainCamera.nearClipPlane);
+        var worldPosition = mainCamera.ScreenToWorldPoint(screenBottomCenter);
+        worldPosition.z = 0;
         return worldPosition;
     }
 }

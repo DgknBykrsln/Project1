@@ -14,6 +14,8 @@ public class GameInstaller : MonoInstaller
     [SerializeField, Foldout("Setup Theme")] private ThemeManager themeManager;
     [SerializeField, Foldout("Setup Theme")] private List<Theme> themes;
 
+    [SerializeField, Foldout("Setup UiPanel")] private CustomInputField customInputField;
+
     public override void InstallBindings()
     {
         BindStateMachine<Cell, Cell.CellState>();
@@ -21,6 +23,7 @@ public class GameInstaller : MonoInstaller
 
         BindThemeManager();
 
+        BindFromInstance(customInputField);
         BindFromInstance(cameraManager);
         BindFromInstance(gridManager);
         BindFromInstance(objectPooler);

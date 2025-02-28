@@ -5,11 +5,8 @@ using NaughtyAttributes;
 using UnityEngine;
 using Zenject;
 
-public class SpriteButtonIcon : SpriteButton
+public class SpriteButtonIcon : SpriteButtonContent
 {
-    [SerializeField, BoxGroup("Settings")] private float moveYAmount;
-
-    [SerializeField, Foldout("Setup")] private Transform moveRoot;
     [SerializeField, Foldout("Setup")] private Transform scaleRoot;
     [SerializeField, Foldout("Setup")] private SpriteRenderer iconSpriteRenderer;
 
@@ -24,20 +21,6 @@ public class SpriteButtonIcon : SpriteButton
     private Tween scaleTween;
 
     private bool canClick = true;
-
-    protected override void NormalEnter()
-    {
-        base.NormalEnter();
-
-        moveRoot.localPosition = Vector3.zero;
-    }
-
-    protected override void PressedEnter()
-    {
-        base.PressedEnter();
-
-        moveRoot.localPosition = Vector3.up * -moveYAmount;
-    }
 
     protected override void PressedExecute()
     {

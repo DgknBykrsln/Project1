@@ -20,7 +20,10 @@ public class GridManager : MonoBehaviour
     [SerializeField, BoxGroup("Settings")] private int gridSize;
     [SerializeField, ReadOnly] private List<Cell> cells = new();
 
+    public int GridSize => gridSize;
+
     public static UnityAction<int> OnGridUpdate;
+    public static UnityAction CellsMatched;
 
     private CameraManager cameraManager;
     private ObjectPooler objectPooler;
@@ -95,7 +98,7 @@ public class GridManager : MonoBehaviour
     }
 
     [Button]
-    public void UpdateGrid()
+    private void UpdateGrid()
     {
         var totalCellsNeeded = gridSize * gridSize;
         var orthoHeight = cameraManager.Height;
@@ -144,6 +147,11 @@ public class GridManager : MonoBehaviour
         OnGridUpdate?.Invoke(gridSize);
     }
 
+    public void UpdateGrid(int newSize)
+    {
+        gridSize = newSize;
+        UpdateGrid();
+    }
 
     public void NotifyStateChange()
     {
@@ -169,6 +177,11 @@ public class GridManager : MonoBehaviour
         foreach (var cell in cellsToSwitch)
         {
             cell.ToggleStateWithAnimation(SpriteButtonIcon.ScaleDuration);
+        }
+
+        if (cellsToSwitch.Count > 0)
+        {
+            CellsMatched?.Invoke();
         }
     }
 }
